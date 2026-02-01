@@ -3,7 +3,8 @@ import { auth } from "@/lib/auth";
 
 export enum Role {
 	ADMIN = "ADMIN",
-	USER = "USER",
+	SELLER = "SELLER",
+	CUSTOMER = "CUSTOMER",
 }
 
 type MiddlewareFunction = (

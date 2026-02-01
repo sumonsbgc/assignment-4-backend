@@ -2,10 +2,14 @@
 	"name": "backend",
 	"version": "1.0.0",
 	"description": "",
-	"main": "./src/server.ts",
+	"main": "server.ts",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"dev": "npx tsx watch src/server.ts"
+		"dev": "npx tsx watch src/server.ts",
+		"prisma:generate": "prisma generate",
+		"prisma:migrate": "prisma migrate dev",
+		"prisma:seed": "node prisma/seed.ts",
+		"prisma:studio": "prisma studio"
 	},
 	"keywords": [],
 	"author": "",
