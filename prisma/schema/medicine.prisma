@@ -1,0 +1,52 @@
+model Medicine {
+  id                  String   @id @default(cuid())
+  name                String
+  slug                String   @unique
+  sku                 String?  @unique // Stock Keeping Unit
+  description         String?
+  genericName         String?
+  manufacturer        String
+  
+  // Pricing & Stock
+  price               Float
+  discountPrice       Float?
+  discountPercentage  Float?   // Calculated discount %
+  stockQuantity       Int      @default(0)
+  lowStockThreshold   Int      @default(10) // Alert when stock is low
+  unit                String   @default("pcs") // pcs, bottle, box, strip, pack
+  
+  // Product Details
+  imageUrl            String?
+  images              String[] // Multiple images as array
+  dosageForm          String?  // tablet, capsule, syrup, injection, cream, ointment
+  strength            String?  // e.g., "500mg", "10ml", "5%"
+  packSize            String?  // e.g., "10 tablets", "100ml bottle"
+  
+  // Safety & Compliance
+  requiresPrescription Boolean @default(false) // Even if all OTC, good to have
+  expiryDate          DateTime? // Important for medicines!
+  ingredients         String?  // Active ingredients
+  sideEffects         String?  // Possible side effects
+  warnings            String?  // Usage warnings
+  storage             String?  // Storage instructions
+  
+  // Relations
+  categoryId          String
+  category            Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  sellerId            String
+  seller              User     @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  
+  
+  // Status
+  isActive            Boolean  @default(true)
+  isFeatured          Boolean  @default(false) // For homepage display
+  
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([sellerId])
+  @@index([slug])
+  @@index([sku])
+  @@map("medicine")
+}
