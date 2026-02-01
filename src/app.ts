@@ -3,6 +3,7 @@ import { Application } from "express";
 import cors from "cors";
 import { toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth";
+import categoryRoutes from "./modules/category/category.routes";
 
 const app: Application = express();
 
@@ -15,5 +16,8 @@ app.get("/", (req, res) => {
 });
 
 app.all("/api/auth/{*any}", toNodeHandler(auth));
+
+// API Routes
+app.use("/api/categories", categoryRoutes);
 
 export default app;
