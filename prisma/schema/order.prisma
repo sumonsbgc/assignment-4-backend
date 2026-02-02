@@ -1,0 +1,84 @@
+model Order {
+  id              String      @id @default(cuid())
+  orderNumber     String      @unique
+  userId          String
+  status          OrderStatus @default(PENDING)
+  
+  // Pricing
+  subtotal        Float       // Sum of all items
+  shippingCost    Float       @default(0)
+  tax             Float       @default(0)
+  totalAmount     Float       // subtotal + shipping + tax
+  discount        Float       @default(0)
+  
+  // Shipping Information
+  shippingAddress String
+  city            String
+  state           String?
+  zipCode         String
+  country         String      @default("Bangladesh")
+  phone           String
+  
+  // Payment Information
+  paymentMethod   String      // COD, Card, Mobile Banking
+  paymentStatus   PaymentStatus @default(UNPAID)
+  paidAt          DateTime?
+  
+  // Additional Info
+  notes           String?
+  trackingNumber  String?
+  
+  // Timestamps
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  deliveredAt     DateTime?
+  cancelledAt     DateTime?
+  
+  // Relations
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orderItems OrderItem[]
+
+  @@index([userId])
+  @@index([orderNumber])
+  @@index([status])
+  @@index([createdAt])
+  @@map("order")
+}
+
+model OrderItem {
+  id         String   @id @default(cuid())
+  orderId    String
+  medicineId String
+  quantity   Int
+  price      Float    // Price at the time of order
+  discount   Float    @default(0)
+  subtotal   Float    // quantity * (price - discount)
+  
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  order    Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  medicine Medicine @relation(fields: [medicineId], references: [id], onDelete: Restrict)
+
+  @@index([orderId])
+  @@index([medicineId])
+  @@map("order_item")
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  RETURNED
+}
+
+enum PaymentStatus {
+  UNPAID
+  PAID
+  FAILED
+  REFUNDED
+}

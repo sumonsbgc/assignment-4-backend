@@ -1,0 +1,32 @@
+model Review {
+  id         String   @id @default(cuid())
+  userId     String
+  medicineId String
+  rating     Int?     // 1-5 stars (null for replies)
+  title      String?
+  comment    String?
+  isVerified Boolean  @default(false) // Verified purchase
+  
+  // Parent-Child relationship for replies
+  parentId   String?  // Null for main reviews, set for replies
+  parent     Review?  @relation("ReviewReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies    Review[] @relation("ReviewReplies")
+  
+  // Moderation
+  isApproved Boolean  @default(true)
+  isReported Boolean  @default(false)
+  
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  medicine Medicine @relation(fields: [medicineId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, medicineId, parentId]) // One main review per user per medicine, multiple replies allowed
+  @@index([medicineId])
+  @@index([userId])
+  @@index([rating])
+  @@index([parentId])
+  @@map("review")
+}

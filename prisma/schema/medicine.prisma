@@ -35,6 +35,9 @@ model Medicine {
   category            Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   sellerId            String
   seller              User     @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  carts               Cart[]      // Cart items
+  orderItems          OrderItem[] // Order items
+  reviews             Review[]    // Medicine reviews
   
   
   // Status

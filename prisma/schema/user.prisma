@@ -12,6 +12,9 @@ model User {
   sessions      Session[]
   accounts      Account[]
   medicines     Medicine[] // Medicines added by seller
+  carts         Cart[]     // User's shopping cart
+  orders        Order[]    // User's orders
+  reviews       Review[]   // User's reviews
 
   @@unique([email])
   @@map("user")
