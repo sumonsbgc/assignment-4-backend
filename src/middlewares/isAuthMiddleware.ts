@@ -24,6 +24,8 @@ export const isAuth = (...roles: Role[]): MiddlewareFunction => {
 				headers: req.headers as Record<string, string>,
 			});
 
+			console.log(session, "Session in isAuth Middleware");
+
 			if (!session || !session.user) {
 				res
 					.status(401)
@@ -31,14 +33,14 @@ export const isAuth = (...roles: Role[]): MiddlewareFunction => {
 				return;
 			}
 
-			if (!session.user.emailVerified) {
-				res.status(403).json({
-					success: false,
-					message:
-						"Email Verification Required. Please verify your email address",
-				});
-				return;
-			}
+			// if (!session.user.emailVerified) {
+			// 	res.status(403).json({
+			// 		success: false,
+			// 		message:
+			// 			"Email Verification Required. Please verify your email address",
+			// 	});
+			// 	return;
+			// }
 
 			if (roles.length && !roles.includes(session.user.role as Role)) {
 				res.status(403).json({
