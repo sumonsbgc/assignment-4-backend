@@ -1,11 +1,15 @@
 import express from "express";
-import { Application } from "express";
 import cors from "cors";
-import { toNodeHandler } from "better-auth/node";
-import { auth } from "./lib/auth";
 import categoryRoutes from "./modules/category/category.routes";
 import medicineRoutes from "./modules/medicine/medicine.routes";
 import userRoutes from "./modules/user/user.routes";
+import cartRoutes from "./modules/cart/cart.routes";
+import orderRoutes from "./modules/order/order.routes";
+import reviewRoutes from "./modules/review/review.routes";
+
+import { Application } from "express";
+import { toNodeHandler } from "better-auth/node";
+import { auth } from "./lib/auth";
 
 const app: Application = express();
 
@@ -20,9 +24,12 @@ app.get("/", (req, res) => {
 app.all("/api/auth/{*any}", toNodeHandler(auth));
 
 // API Routes
+app.use("/api/users", userRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/medicines", medicineRoutes);
-app.use("/api/users", userRoutes);
+app.use("/api/reviews", reviewRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/orders", orderRoutes);
 
 // Error Handler
 app.use(
