@@ -11,6 +11,7 @@ class MedicineController {
 		next: NextFunction,
 	) => {
 		try {
+			console.log("Fetching medicines with query:", req.query, req.params);
 			const result = await this.service.getMedicines(req.query);
 
 			res.status(200).json({
@@ -142,7 +143,8 @@ class MedicineController {
 	) => {
 		try {
 			// If seller, show only their medicines; if admin, show all
-			const sellerId = (req.user as any)?.role === "SELLER" ? req.user?.id : undefined;
+			const sellerId =
+				(req.user as any)?.role === "SELLER" ? req.user?.id : undefined;
 
 			const medicines = await this.service.getLowStockMedicines(sellerId);
 

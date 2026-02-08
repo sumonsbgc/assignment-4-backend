@@ -2,12 +2,16 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
 import config from "./config";
+import { nextCookies } from "better-auth/next-js";
 
 export const auth = betterAuth({
 	database: prismaAdapter(prisma, {
 		provider: "postgresql",
 	}),
-	trustedOrigins: [config.appUrl || "http://localhost:3000"],
+	plugins: [nextCookies()],
+	baseURL: config.betterAuthUrl,
+	secret: config.betterAuthSecret,
+	trustedOrigins: [config.appUrl],
 	emailAndPassword: {
 		enabled: true,
 		autoSignIn: false,
@@ -18,6 +22,7 @@ export const auth = betterAuth({
 			enabled: true,
 			clientId: config.gclientId,
 			clientSecret: config.gclientSecret,
+			redirectURI: `${config.betterAuthUrl}/api/auth/callback/google`,
 		},
 	},
 	user: {

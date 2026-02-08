@@ -3,21 +3,24 @@ import { seedCategories } from "@modules/category/category.seed";
 import { seedMedicines } from "@modules/medicine/medicine.seed";
 import { seedAdmins } from "@modules/user/admin.seed";
 import { seedCustomers, seedSellers } from "@modules/user/user.seed";
+import { deleteAllUsers } from "./modules/user/delete.seed";
 
 async function main() {
 	console.log("🌱 Starting database seeding...\n");
 	try {
+		// Delete existing data
+		// await deleteAllUsers();
 		// Seed admins
 		await seedAdmins();
 		// Seed customers
-		await seedCustomers();
-		// Seed sellers
-		await seedSellers();
+		// await seedCustomers();
+		// // Seed sellers
+		// await seedSellers();
 
-		// Seed categories
-		await seedCategories();
-		// Seed medicines
-		await seedMedicines();
+		// // Seed categories
+		// await seedCategories();
+		// // Seed medicines
+		// await seedMedicines();
 
 		console.log("\n🎉 Database seeding completed successfully!");
 	} catch (error) {
