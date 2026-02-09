@@ -28,7 +28,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/medicines", medicineRoutes);
 app.use("/api/reviews", reviewRoutes);
-app.use("/api/cart", cartRoutes);
+app.use("/api/carts", cartRoutes);
 app.use("/api/orders", orderRoutes);
 
 // Error Handler

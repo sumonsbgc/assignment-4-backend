@@ -11,7 +11,7 @@ async function main() {
 		// Delete existing data
 		// await deleteAllUsers();
 		// Seed admins
-		await seedAdmins();
+		// await seedAdmins();
 		// Seed customers
 		// await seedCustomers();
 		// // Seed sellers
@@ -20,7 +20,7 @@ async function main() {
 		// // Seed categories
 		// await seedCategories();
 		// // Seed medicines
-		// await seedMedicines();
+		await seedMedicines();
 
 		console.log("\n🎉 Database seeding completed successfully!");
 	} catch (error) {
