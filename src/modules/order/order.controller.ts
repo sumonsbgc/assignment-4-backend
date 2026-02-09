@@ -80,17 +80,23 @@ class OrderController {
 		next: NextFunction,
 	) => {
 		try {
-			const userId = (req.user as any)?.id;
+			const user = req.user as any;
+			const userId = user?.id;
+			const userRole = user?.role;
 			const { id } = req.params;
 
-			if (!userId) {
+			if (!userId || !userRole) {
 				return res.status(401).json({
 					success: false,
 					message: "Unauthorized",
 				});
 			}
 
-			const order = await orderService.getOrderById(String(id), userId);
+			const order = await orderService.getOrderById(
+				String(id),
+				userId,
+				userRole,
+			);
 
 			if (!order) {
 				return res.status(404).json({
@@ -119,6 +125,41 @@ class OrderController {
 			const status = req.query.status as OrderStatus | undefined;
 
 			const result = await orderService.getAllOrders(page, limit, status);
+
+			res.status(200).json({
+				success: true,
+				data: result.data,
+				pagination: result.pagination,
+			});
+		} catch (error) {
+			next(error);
+		}
+	};
+
+	getSellerOrders: RequestHandler = async (
+		req: Request,
+		res: Response,
+		next: NextFunction,
+	) => {
+		try {
+			const sellerId = (req.user as any)?.id;
+			const page = parseInt(req.query.page as string) || 1;
+			const limit = parseInt(req.query.limit as string) || 20;
+			const status = req.query.status as OrderStatus | undefined;
+
+			if (!sellerId) {
+				return res.status(401).json({
+					success: false,
+					message: "Unauthorized",
+				});
+			}
+
+			const result = await orderService.getSellerOrders(
+				sellerId,
+				page,
+				limit,
+				status,
+			);
 
 			res.status(200).json({
 				success: true,

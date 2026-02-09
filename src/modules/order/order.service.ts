@@ -156,10 +156,19 @@ class OrderService {
 		};
 	};
 
-	getOrderById = async (orderId: string, userId?: string) => {
+	getOrderById = async (orderId: string, userId: string, role: string) => {
 		const where: any = { id: orderId };
-		if (userId) {
+
+		if (role === "CUSTOMER") {
 			where.userId = userId;
+		} else if (role === "SELLER") {
+			where.orderItems = {
+				some: {
+					medicine: {
+						sellerId: userId,
+					},
+				},
+			};
 		}
 
 		return await prisma.order.findFirst({
@@ -197,6 +206,76 @@ class OrderService {
 	): Promise<PaginatedOrdersResponse> => {
 		const skip = (page - 1) * limit;
 		const where = status ? { status } : {};
+
+		const [orders, total] = await Promise.all([
+			prisma.order.findMany({
+				where,
+				include: {
+					orderItems: {
+						include: {
+							medicine: {
+								select: {
+									id: true,
+									name: true,
+									slug: true,
+									imageUrl: true,
+								},
+							},
+						},
+					},
+					user: {
+						select: {
+							id: true,
+							name: true,
+							email: true,
+						},
+					},
+				},
+				orderBy: {
+					createdAt: "desc",
+				},
+				skip,
+				take: limit,
+			}),
+			prisma.order.count({ where }),
+		]);
+
+		const totalPages = Math.ceil(total / limit);
+
+		return {
+			data: orders as any,
+			pagination: {
+				page,
+				limit,
+				total,
+				totalPages,
+				hasMore: page < totalPages,
+			},
+		};
+	};
+
+	getSellerOrders = async (
+		sellerId: string,
+		page: number = 1,
+		limit: number = 20,
+		status?: OrderStatus,
+	): Promise<PaginatedOrdersResponse> => {
+		const skip = (page - 1) * limit;
+
+		// Build where clause
+		const where: any = {
+			orderItems: {
+				some: {
+					medicine: {
+						sellerId: sellerId,
+					},
+				},
+			},
+		};
+
+		if (status) {
+			where.status = status;
+		}
 
 		const [orders, total] = await Promise.all([
 			prisma.order.findMany({
