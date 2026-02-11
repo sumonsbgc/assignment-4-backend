@@ -3,8 +3,8 @@ import type {
 	CreateMedicineDto,
 	UpdateMedicineDto,
 	PaginatedResponse,
-} from "./medicine.types";
-import { buildMedicineQuery } from "./medicine.query-builder";
+} from "./medicine.types.js";
+import { buildMedicineQuery } from "./medicine.query-builder.js";
 import { helper } from "../../helper";
 
 class MedicineService {

@@ -1,4 +1,4 @@
-export * from "./review.types";
-export * from "./review.service";
-export * from "./review.controller";
-export { default as reviewRoutes } from "./review.routes";
+export * from "./review.types.js";
+export * from "./review.service.js";
+export * from "./review.controller.js";
+export { default as reviewRoutes } from "./review.routes.js";

@@ -1,11 +1,11 @@
 import type { Request, Response, NextFunction, RequestHandler } from "express";
-import { orderService } from "./order.service";
+import { orderService } from "./order.service.js";
 import type {
 	CreateOrderDto,
 	UpdateOrderStatusDto,
 	UpdatePaymentStatusDto,
 	OrderStatus,
-} from "./order.types";
+} from "./order.types.js";
 
 class OrderController {
 	createOrder: RequestHandler = async (

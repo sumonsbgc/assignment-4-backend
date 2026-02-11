@@ -1,4 +1,4 @@
-export * from "./cart.types";
-export * from "./cart.service";
-export * from "./cart.controller";
-export { default as cartRoutes } from "./cart.routes";
+export * from "./cart.types.js";
+export * from "./cart.service.js";
+export * from "./cart.controller.js";
+export { default as cartRoutes } from "./cart.routes.js";

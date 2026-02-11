@@ -4,7 +4,7 @@ import type {
 	CategoryFilters,
 	CreateCategoryDto,
 	UpdateCategoryDto,
-} from "./category.types";
+} from "./category.types.js";
 
 class CategoryService {
 	getCategories = async (filters?: CategoryFilters) => {

@@ -1,4 +1,4 @@
-export { medicineController } from "./medicine.controller";
-export { medicineService } from "./medicine.service";
-export { default as medicineRoutes } from "./medicine.routes";
-export type * from "./medicine.types";
+export { medicineController } from "./medicine.controller.js";
+export { medicineService } from "./medicine.service.js";
+export { default as medicineRoutes } from "./medicine.routes.js";
+export type * from "./medicine.types.js";

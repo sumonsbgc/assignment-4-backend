@@ -1,5 +1,5 @@
 import { prisma } from "@lib/prisma";
-import type { CreateUserDto, UpdateUserDto } from "./user.types";
+import type { CreateUserDto, UpdateUserDto } from "./user.types.js";
 import { helper } from "@/helper";
 
 class UserService {

@@ -4,7 +4,7 @@ import type {
 	UpdateReviewDto,
 	MedicineReviewsResponse,
 	PaginatedReviewsResponse,
-} from "./review.types";
+} from "./review.types.js";
 
 class ReviewService {
 	createReview = async (userId: string, data: CreateReviewDto) => {

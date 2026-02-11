@@ -1,4 +1,4 @@
-export * from "./user.types";
-export * from "./user.service";
-export * from "./user.controller";
-export { default as userRoutes } from "./user.routes";
+export * from "./user.types.js";
+export * from "./user.service.js";
+export * from "./user.controller.js";
+export { default as userRoutes } from "./user.routes.js";

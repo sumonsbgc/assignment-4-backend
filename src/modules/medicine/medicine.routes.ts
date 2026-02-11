@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { medicineController } from "./medicine.controller";
+import { medicineController } from "./medicine.controller.js";
 import { isAuth, Role } from "@/middlewares/isAuthMiddleware";
 import { isMedicineOwner, attachSellerId } from "@/middlewares/isMedicineOwner";
 

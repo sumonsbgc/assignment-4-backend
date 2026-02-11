@@ -1,15 +1,15 @@
 import express from "express";
 import cors from "cors";
-import categoryRoutes from "./modules/category/category.routes";
-import medicineRoutes from "./modules/medicine/medicine.routes";
-import userRoutes from "./modules/user/user.routes";
-import cartRoutes from "./modules/cart/cart.routes";
-import orderRoutes from "./modules/order/order.routes";
-import reviewRoutes from "./modules/review/review.routes";
+import categoryRoutes from "./modules/category/category.routes.js";
+import medicineRoutes from "./modules/medicine/medicine.routes.js";
+import userRoutes from "./modules/user/user.routes.js";
+import cartRoutes from "./modules/cart/cart.routes.js";
+import orderRoutes from "./modules/order/order.routes.js";
+import reviewRoutes from "./modules/review/review.routes.js";
 
 import { Application } from "express";
 import { toNodeHandler } from "better-auth/node";
-import { auth } from "./lib/auth";
+import { auth } from "./lib/auth.js";
 
 const app: Application = express();
 

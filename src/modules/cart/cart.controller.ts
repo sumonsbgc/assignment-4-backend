@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction, RequestHandler } from "express";
-import { cartService } from "./cart.service";
-import type { AddToCartDto, UpdateCartDto } from "./cart.types";
+import { cartService } from "./cart.service.js";
+import type { AddToCartDto, UpdateCartDto } from "./cart.types.js";
 
 class CartController {
 	getCart: RequestHandler = async (

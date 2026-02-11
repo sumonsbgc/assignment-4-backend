@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction, RequestHandler } from "express";
-import { medicineService } from "./medicine.service";
-import type { CreateMedicineDto, UpdateMedicineDto } from "./medicine.types";
+import { medicineService } from "./medicine.service.js";
+import type { CreateMedicineDto, UpdateMedicineDto } from "./medicine.types.js";
 
 class MedicineController {
 	private service = medicineService;

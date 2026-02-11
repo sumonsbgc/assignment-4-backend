@@ -6,7 +6,7 @@ import type {
 	UpdatePaymentStatusDto,
 	OrderStatus,
 	PaginatedOrdersResponse,
-} from "./order.types";
+} from "./order.types.js";
 
 class OrderService {
 	private generateOrderNumber = (): string => {

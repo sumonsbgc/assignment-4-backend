@@ -1,5 +1,5 @@
 import { prisma } from "../../lib/prisma";
-import type { AddToCartDto, UpdateCartDto, CartSummary } from "./cart.types";
+import type { AddToCartDto, UpdateCartDto, CartSummary } from "./cart.types.js";
 
 class CartService {
 	getCart = async (userId: string): Promise<CartSummary> => {

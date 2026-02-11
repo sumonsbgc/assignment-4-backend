@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction, RequestHandler } from "express";
-import { reviewService } from "./review.service";
-import type { CreateReviewDto, UpdateReviewDto } from "./review.types";
+import { reviewService } from "./review.service.js";
+import type { CreateReviewDto, UpdateReviewDto } from "./review.types.js";
 
 class ReviewController {
 	createReview: RequestHandler = async (
