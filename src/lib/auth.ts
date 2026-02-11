@@ -10,10 +10,10 @@ export const auth = betterAuth({
 	baseURL: config.betterAuthUrl,
 	secret: config.betterAuthSecret,
 	trustedOrigins: [config.appUrl, "http://localhost:3000"],
-	advanced: {
-		cookiePrefix: "better-auth",
-		useSecureCookies: false,
-	},
+	// advanced: {
+	// 	cookiePrefix: "better-auth",
+	// 	useSecureCookies: false,
+	// },
 	emailAndPassword: {
 		enabled: true,
 		autoSignIn: false,
