@@ -2,7 +2,6 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma.js";
 import config from "./config.js";
-import { nextCookies } from "better-auth/next-js";
 
 export const auth = betterAuth({
 	database: prismaAdapter(prisma, {
@@ -12,19 +11,12 @@ export const auth = betterAuth({
 	secret: config.betterAuthSecret,
 	trustedOrigins: [
 		config.appUrl,
-		// "http://localhost:3000",
-		// "http://localhost:3001",
+		"http://localhost:3000",
 	],
-	// session: {
-	// 	cookieCache: {
-	// 		enabled: true,
-	// 		maxAge: 5 * 60, // 5 minutes
-	// 	},
-	// },
-	// advanced: {
-	// 	cookiePrefix: "better-auth",
-	// 	useSecureCookies: process.env.NODE_ENV === "production",
-	// },
+	advanced: {
+		cookiePrefix: "better-auth",
+		useSecureCookies: false,
+	},
 	emailAndPassword: {
 		enabled: true,
 		autoSignIn: false,
