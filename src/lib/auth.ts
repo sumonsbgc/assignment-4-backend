@@ -11,11 +11,8 @@ export const auth = betterAuth({
 	secret: config.betterAuthSecret,
 	trustedOrigins: [config.appUrl],
 	advanced: {
-		useSecureCookies: true,
+		useSecureCookies: process.env.NODE_ENV === "production",
 		cookiePrefix: "medishop",
-		crossSubDomainCookies: {
-			enabled: true,
-		},
 	},
 	emailAndPassword: {
 		enabled: true,
