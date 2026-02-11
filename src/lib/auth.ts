@@ -34,7 +34,6 @@ export const auth = betterAuth({
 
 		return [];
 	},
-	basePath: "/api/auth",
 	session: {
 		cookieCache: {
 			enabled: true,
