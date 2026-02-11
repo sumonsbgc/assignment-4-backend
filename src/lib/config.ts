@@ -1,6 +1,6 @@
 const config = {
-	appUrl: process.env.APP_URL || "http://localhost:3000",
-	databaseUrl: process.env.DATABASE_URL || "mongodb://localhost:27017/myapp",
+	appUrl: process.env.FRONTEND_APP_URL || "http://localhost:3000",
+	databaseUrl: process.env.DATABASE_URL || "",
 	port: process.env.PORT || 5000,
 	betterAuthUrl: process.env.BETTER_AUTH_URL || "http://localhost:5000",
 	betterAuthSecret: process.env.BETTER_AUTH_SECRET || "",

@@ -1,11 +1,12 @@
 {
-	"name": "backend",
+	"name": "medishop-backend",
 	"version": "1.0.0",
-	"description": "",
-	"main": "server.ts",
+	"description": "Assignment 4 API for Medishop",
+	"main": "index.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
 		"dev": "npx tsx watch src/server.ts",
+		"build": "tsc",
+		"vercel-build": "prisma generate && tsc",
 		"prisma:generate": "prisma generate",
 		"prisma:migrate": "prisma migrate dev",
 		"prisma:seed": "tsx src/seed.ts",
