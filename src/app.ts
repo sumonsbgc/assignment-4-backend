@@ -13,6 +13,9 @@ import { auth } from "./lib/auth.js";
 
 const app: Application = express();
 
+// Trust proxy for Vercel
+app.set("trust proxy", 1);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -26,7 +29,7 @@ app.get("/", (req, res) => {
 	res.send("Hello, World!");
 });
 
-app.all("/api/auth/{*any}", toNodeHandler(auth));
+app.all("/api/auth/*", toNodeHandler(auth));
 
 // API Routes
 app.use("/api/users", userRoutes);
