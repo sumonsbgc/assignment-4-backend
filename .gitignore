@@ -67,3 +67,4 @@ temp/
 /generated/prisma
 
 /generated/prisma
+.vercel
