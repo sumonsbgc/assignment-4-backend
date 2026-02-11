@@ -21,4 +21,6 @@ export interface CategoryFilters {
 	isActive?: boolean;
 	parentId?: string | null;
 	search?: string;
+	page?: number;
+	limit?: number;
 }

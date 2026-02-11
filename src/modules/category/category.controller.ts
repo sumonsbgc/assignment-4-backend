@@ -12,7 +12,7 @@ class CategoryController {
 	) => {
 		try {
 			console.log("Category Controller", req.query);
-			const { isActive, parentId, search } = req.query;
+			const { isActive, parentId, search, page, limit } = req.query;
 
 			const filters: any = {
 				parentId: parentId === "null" ? null : (parentId as string | undefined),
@@ -23,12 +23,28 @@ class CategoryController {
 				filters.isActive = isActive === "true";
 			}
 
-			const categories = await this.service.getCategories(filters);
+			if (page !== undefined) {
+				filters.page = parseInt(page as string);
+			}
 
-			res.status(200).json({
-				success: true,
-				data: categories,
-			});
+			if (limit !== undefined) {
+				filters.limit = parseInt(limit as string);
+			}
+
+			const result = await this.service.getCategories(filters);
+
+			if (result && typeof result === "object" && "pagination" in result) {
+				res.status(200).json({
+					success: true,
+					data: result.data,
+					pagination: result.pagination,
+				});
+			} else {
+				res.status(200).json({
+					success: true,
+					data: result,
+				});
+			}
 		} catch (error) {
 			next(error);
 		}
@@ -114,7 +130,7 @@ class CategoryController {
 		try {
 			const { id } = req.params;
 			const data: UpdateCategoryDto = req.body;
-
+			console.log({ data, id }, "Update");
 			const category = await this.service.updateCategory(String(id), data);
 
 			res.status(200).json({

@@ -25,32 +25,72 @@ class CategoryService {
 			];
 		}
 
-		return await prisma.category.findMany({
-			where,
-			include: {
-				parent: {
-					select: {
-						id: true,
-						name: true,
-						slug: true,
-					},
-				},
-				children: {
-					select: {
-						id: true,
-						name: true,
-						slug: true,
-						isActive: true,
-					},
-				},
-				_count: {
-					select: {
-						medicines: true,
-					},
+		const includeOptions = {
+			parent: {
+				select: {
+					id: true,
+					name: true,
+					slug: true,
 				},
 			},
+			children: {
+				select: {
+					id: true,
+					name: true,
+					slug: true,
+					isActive: true,
+				},
+			},
+			_count: {
+				select: {
+					medicines: true,
+				},
+			},
+		};
+
+		// Check if pagination is requested
+		const hasPagination =
+			filters?.page !== undefined || filters?.limit !== undefined;
+
+		if (hasPagination) {
+			// Return paginated data
+			const page = filters?.page || 1;
+			const limit = filters?.limit || 10;
+			const skip = (page - 1) * limit;
+
+			const [categories, total] = await Promise.all([
+				prisma.category.findMany({
+					where,
+					include: includeOptions,
+					orderBy: [{ order: "asc" }, { name: "asc" }],
+					skip,
+					take: limit,
+				}),
+				prisma.category.count({ where }),
+			]);
+
+			const totalPages = Math.ceil(total / limit);
+
+			return {
+				data: categories,
+				pagination: {
+					page,
+					limit,
+					total,
+					totalPages,
+					hasMore: page < totalPages,
+				},
+			};
+		}
+
+		// Return all data without pagination
+		const categories = await prisma.category.findMany({
+			where,
+			include: includeOptions,
 			orderBy: [{ order: "asc" }, { name: "asc" }],
 		});
+
+		return categories;
 	};
 
 	getCategoryById = async (id: string) => {

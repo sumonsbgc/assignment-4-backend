@@ -1,8 +1,10 @@
 const getSlug = (name: string): string => {
 	return name
 		.toLowerCase()
-		.replace(/[^a-z0-9]+/g, "-")
-		.replace(/(^-|-$)/g, "");
+		.trim()
+		.replace(/[^\w\s-]/g, "")
+		.replace(/[\s_-]+/g, "-")
+		.replace(/^-+|-+$/g, "");
 };
 
 export async function hashPassword(password: string): Promise<string> {
