@@ -9,11 +9,32 @@ export const auth = betterAuth({
 	}),
 	baseURL: config.betterAuthUrl,
 	secret: config.betterAuthSecret,
-	trustedOrigins: [config.appUrl],
-	advanced: {
-		useSecureCookies: process.env.NODE_ENV === "production",
-		cookiePrefix: "medishop",
+	// trustedOrigins: [config.appUrl],
+	trustedOrigins: async (request) => {
+		const origin = request?.headers.get("origin");
+
+		const allowedOrigins = [
+			config.appUrl,
+			config.betterAuthUrl,
+			"http://localhost:3000",
+			"http://localhost:4000",
+			"http://localhost:5000",
+			"https://assignment-4-frontend-ruddy.vercel.app",
+			"https://backend-ten-theta-88.vercel.app",
+		].filter(Boolean);
+
+		// Check if origin matches allowed origins or Vercel pattern
+		if (
+			!origin ||
+			allowedOrigins.includes(origin) ||
+			/^https:\/\/.*\.vercel\.app$/.test(origin)
+		) {
+			return [origin];
+		}
+
+		return [];
 	},
+	basePath: "/api/auth",
 	emailAndPassword: {
 		enabled: true,
 		autoSignIn: false,
