@@ -11,7 +11,7 @@ export const auth = betterAuth({
 	secret: config.betterAuthSecret,
 	trustedOrigins: [config.appUrl, "http://localhost:3000"],
 	advanced: {
-		// cookiePrefix: "better-auth",
+		cookiePrefix: "better-auth",
 		useSecureCookies: false,
 	},
 	emailAndPassword: {
