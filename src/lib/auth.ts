@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma.js";
 import config from "./config.js";
+import { nextCookies } from "better-auth/next-js";
 
 export const auth = betterAuth({
 	database: prismaAdapter(prisma, {
@@ -14,8 +15,11 @@ export const auth = betterAuth({
 		"http://localhost:3000",
 		"http://localhost:3001",
 	],
-	advanced: {
-		useSecureCookies: false,
+	session: {
+		cookieCache: {
+			enabled: true,
+			maxAge: 60 * 60 * 24, // 1 day
+		},
 	},
 	emailAndPassword: {
 		enabled: true,
