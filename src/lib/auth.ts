@@ -15,12 +15,16 @@ export const auth = betterAuth({
 		"http://localhost:3001",
 	],
 	advanced: {
+		cookiePrefix: "better-auth",
 		defaultCookieAttributes: {
 			sameSite: "lax",
 			secure: process.env.NODE_ENV === "production",
 			httpOnly: true,
 			path: "/",
 			maxAge: 60 * 60 * 24 * 7, // 7 days
+		},
+		crossSubDomainCookies: {
+			enabled: false,
 		},
 	},
 	emailAndPassword: {
