@@ -15,22 +15,11 @@ export const auth = betterAuth({
 		"http://localhost:3001",
 	],
 	advanced: {
-		cookies: {
-			session_token: {
-				name: "session_token",
-				attributes: {
-					sameSite: "None",
-					secure: process.env.NODE_ENV === "production",
-					httpOnly: true,
-					path: "/",
-					maxAge: 60 * 60 * 24 * 7, // 7 days
-				},
-			},
-		},
 		defaultCookieAttributes: {
-			sameSite: "None",
+			sameSite: "lax",
 			secure: process.env.NODE_ENV === "production",
 			httpOnly: true,
+			path: "/",
 			maxAge: 60 * 60 * 24 * 7, // 7 days
 		},
 	},
