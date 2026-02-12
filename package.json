@@ -2,13 +2,15 @@
 	"name": "medishop-backend",
 	"version": "1.0.0",
 	"description": "Assignment 4 API for Medishop",
-	"main": "api/app.js",
+	"main": "dist/server.js",
 	"scripts": {
 		"dev": "npx tsx watch src/server.ts",
-		"build": "prisma generate && tsup src/index.ts --format esm --platform node --target node24 --outDir api --external pg-native",
+		"build": "prisma generate && tsup src/server.ts --format esm --platform node --target node24 --outDir dist --external pg-native",
+		"start": "node dist/server.js",
 		"postinstall": "prisma generate",
 		"prisma:generate": "prisma generate",
 		"prisma:migrate": "prisma migrate dev",
+		"prisma:migrate:deploy": "prisma migrate deploy",
 		"prisma:seed": "tsx src/seed.ts",
 		"prisma:studio": "prisma studio"
 	},
