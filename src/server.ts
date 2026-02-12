@@ -2,17 +2,19 @@ import "dotenv/config";
 import app from "./app.js";
 import { prisma } from "./lib/prisma.js";
 
-const PORT = process.env.PORT || 5000;
+const PORT = Number(process.env.PORT) || 5000;
+const HOST = "0.0.0.0";
 
 const main = async () => {
 	try {
 		await prisma.$connect();
-		app.listen(PORT, () => {
-			console.log(`Server is running on http://localhost:${PORT}`);
+		console.log("Database connected successfully");
+		app.listen(PORT, HOST, () => {
+			console.log(`Server is running on http://${HOST}:${PORT}`);
 		});
 	} catch (error) {
+		console.error("Error during server initialization:", error);
 		await prisma.$disconnect();
-		console.log("Error during server initialization:", error);
 		process.exit(1);
 	}
 };
