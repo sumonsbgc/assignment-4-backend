@@ -14,6 +14,9 @@ export const auth = betterAuth({
 		"http://localhost:3000",
 		"http://localhost:3001",
 	],
+	advanced: {
+		useSecureCookies: false,
+	},
 	emailAndPassword: {
 		enabled: true,
 		autoSignIn: false,
