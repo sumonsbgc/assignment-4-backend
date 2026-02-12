@@ -23,9 +23,6 @@ export const auth = betterAuth({
 			path: "/",
 			maxAge: 60 * 60 * 24 * 7, // 7 days
 		},
-		crossSubDomainCookies: {
-			enabled: false,
-		},
 	},
 	emailAndPassword: {
 		enabled: true,
