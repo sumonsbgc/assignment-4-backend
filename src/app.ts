@@ -12,7 +12,7 @@ import { toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth.js";
 
 const app: Application = express();
-
+app.set("trust proxy", true); // If behind a proxy (e.g., Heroku, Vercel)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
