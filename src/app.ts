@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+
 import categoryRoutes from "./modules/category/category.routes.js";
 import medicineRoutes from "./modules/medicine/medicine.routes.js";
 import userRoutes from "./modules/user/user.routes.js";
@@ -12,7 +13,7 @@ import { toNodeHandler } from "better-auth/node";
 import { auth } from "./lib/auth.js";
 
 const app: Application = express();
-app.set("trust proxy", true); // If behind a proxy (e.g., Heroku, Vercel)
+app.set("trust proxy", 1); // If behind a proxy (e.g., Heroku, Vercel)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
