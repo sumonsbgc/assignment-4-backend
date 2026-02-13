@@ -180,7 +180,12 @@ class OrderController {
 			const { id } = req.params;
 			const data: UpdateOrderStatusDto = req.body;
 
-			const order = await orderService.updateOrderStatus(String(id), data);
+			const order = await orderService.updateOrderStatus(
+				String(id),
+				data,
+				req.user?.id,
+				req.user?.role,
+			);
 
 			res.status(200).json({
 				success: true,

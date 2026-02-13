@@ -8,6 +8,14 @@ const medicineRoutes: Router = Router();
 // Public routes
 medicineRoutes.get("/", medicineController.index);
 medicineRoutes.get("/slug/:slug", medicineController.getBySlug);
+
+// Low stock must be before /:id to avoid being caught by the param
+medicineRoutes.get(
+	"/low-stock",
+	isAuth(Role.SELLER, Role.ADMIN),
+	medicineController.getLowStock,
+);
+
 medicineRoutes.get("/:id", medicineController.show);
 
 medicineRoutes.post(
@@ -29,12 +37,6 @@ medicineRoutes.delete(
 	isAuth(Role.SELLER),
 	isMedicineOwner,
 	medicineController.delete,
-);
-
-medicineRoutes.get(
-	"/low-stock",
-	isAuth(Role.SELLER, Role.ADMIN),
-	medicineController.getLowStock,
 );
 
 export default medicineRoutes;

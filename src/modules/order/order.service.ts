@@ -324,7 +324,53 @@ class OrderService {
 		};
 	};
 
-	updateOrderStatus = async (orderId: string, data: UpdateOrderStatusDto) => {
+	updateOrderStatus = async (
+		orderId: string,
+		data: UpdateOrderStatusDto,
+		userId?: string,
+		role?: string,
+	) => {
+		const order = await prisma.order.findUnique({
+			where: { id: orderId },
+			include: {
+				orderItems: {
+					include: { medicine: true },
+				},
+			},
+		});
+
+		if (!order) {
+			throw new Error("Order not found");
+		}
+
+		// Seller can only update orders that contain their medicines
+		if (role === "SELLER" && userId) {
+			const hasSellerItems = order.orderItems.some(
+				(item) => item.medicine.sellerId === userId,
+			);
+			if (!hasSellerItems) {
+				throw new Error("You can only update orders containing your medicines");
+			}
+		}
+
+		// Validate status transitions
+		const allowedTransitions: Record<string, string[]> = {
+			PENDING: ["CONFIRMED", "CANCELLED"],
+			CONFIRMED: ["PROCESSING", "CANCELLED"],
+			PROCESSING: ["SHIPPED", "CANCELLED"],
+			SHIPPED: ["DELIVERED", "RETURNED"],
+			DELIVERED: ["RETURNED"],
+			CANCELLED: [],
+			RETURNED: [],
+		};
+
+		const allowed = allowedTransitions[order.status] || [];
+		if (!allowed.includes(data.status)) {
+			throw new Error(
+				`Cannot transition from ${order.status} to ${data.status}`,
+			);
+		}
+
 		const updateData: any = {
 			status: data.status,
 		};
@@ -339,6 +385,15 @@ class OrderService {
 
 		if (data.status === "CANCELLED") {
 			updateData.cancelledAt = new Date();
+			// Restore stock for cancelled orders
+			for (const item of order.orderItems) {
+				await prisma.medicine.update({
+					where: { id: item.medicineId },
+					data: {
+						stockQuantity: { increment: item.quantity },
+					},
+				});
+			}
 		}
 
 		return await prisma.order.update({
@@ -378,6 +433,9 @@ class OrderService {
 				id: orderId,
 				userId,
 			},
+			include: {
+				orderItems: true,
+			},
 		});
 
 		if (!order) {
@@ -386,6 +444,16 @@ class OrderService {
 
 		if (!["PENDING", "CONFIRMED"].includes(order.status)) {
 			throw new Error("Cannot cancel order at this stage");
+		}
+
+		// Restore stock for cancelled items
+		for (const item of order.orderItems) {
+			await prisma.medicine.update({
+				where: { id: item.medicineId },
+				data: {
+					stockQuantity: { increment: item.quantity },
+				},
+			});
 		}
 
 		return await prisma.order.update({

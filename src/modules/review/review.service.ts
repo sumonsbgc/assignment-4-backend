@@ -57,12 +57,24 @@ class ReviewService {
 			throw new Error("You have already reviewed this medicine");
 		}
 
+		// Check if user has purchased this medicine (verified purchase)
+		const hasPurchased = await prisma.orderItem.findFirst({
+			where: {
+				medicineId: data.medicineId,
+				order: {
+					userId,
+					status: { in: ["DELIVERED", "SHIPPED", "PROCESSING", "CONFIRMED"] },
+				},
+			},
+		});
+
 		return await prisma.review.create({
 			data: {
 				userId,
 				medicineId: data.medicineId,
 				rating: data.rating,
 				comment: data.comment,
+				isVerified: !!hasPurchased,
 			},
 			include: {
 				user: {

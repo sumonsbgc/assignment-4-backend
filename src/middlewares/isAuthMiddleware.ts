@@ -42,6 +42,18 @@ export const isAuth = (...roles: Role[]): MiddlewareFunction => {
 			// 	return;
 			// }
 
+			// Check if user is banned/suspended
+			if (
+				session.user.status === "SUSPENDED" ||
+				session.user.status === "INACTIVE"
+			) {
+				res.status(403).json({
+					success: false,
+					message: "Your account has been suspended. Please contact support.",
+				});
+				return;
+			}
+
 			if (roles.length && !roles.includes(session.user.role as Role)) {
 				res.status(403).json({
 					success: false,

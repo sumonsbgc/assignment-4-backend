@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { categoryController } from "./category.controller.js";
+import { isAuth, Role } from "@/middlewares/isAuthMiddleware";
 
 const categoryRoutes: Router = Router();
 
@@ -8,8 +9,9 @@ categoryRoutes.get("/", categoryController.index);
 categoryRoutes.get("/slug/:slug", categoryController.getBySlug);
 categoryRoutes.get("/:id", categoryController.getById);
 
-categoryRoutes.post("/", categoryController.store);
-categoryRoutes.put("/:id", categoryController.update);
-categoryRoutes.delete("/:id", categoryController.delete);
+// Admin-only routes
+categoryRoutes.post("/", isAuth(Role.ADMIN), categoryController.store);
+categoryRoutes.put("/:id", isAuth(Role.ADMIN), categoryController.update);
+categoryRoutes.delete("/:id", isAuth(Role.ADMIN), categoryController.delete);
 
 export default categoryRoutes;
