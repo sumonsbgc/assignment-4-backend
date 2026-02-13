@@ -25,7 +25,7 @@ export function buildMedicineQuery(queryParams: any): QueryBuilderResult {
 	if (queryParams.manufacturer) {
 		where.manufacturer = {
 			contains: queryParams.manufacturer,
-			mode: "insensitive" as Prisma.QueryMode,
+			mode: "insensitive" as Prisma.QueryMode, 
 		};
 	}
 
