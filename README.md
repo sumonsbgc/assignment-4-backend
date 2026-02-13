@@ -55,29 +55,29 @@ Server runs at `http://localhost:5000`
 
 ## Scripts
 
-| Command | Description |
-|---|---|
-| `pnpm dev` | Start dev server with hot reload |
-| `pnpm build` | Build for production |
-| `pnpm start` | Run production build |
-| `pnpm prisma:migrate` | Run database migrations |
-| `pnpm prisma:seed` | Seed database with sample data |
-| `pnpm prisma:studio` | Open Prisma Studio |
+| Command               | Description                      |
+| --------------------- | -------------------------------- |
+| `pnpm dev`            | Start dev server with hot reload |
+| `pnpm build`          | Build for production             |
+| `pnpm start`          | Run production build             |
+| `pnpm prisma:migrate` | Run database migrations          |
+| `pnpm prisma:seed`    | Seed database with sample data   |
+| `pnpm prisma:studio`  | Open Prisma Studio               |
 
 ## API Endpoints
 
-| Group | Base Path | Description |
-|---|---|---|
-| Auth | `/api/auth/*` | Register, login, session (Better Auth) |
-| Users | `/api/users` | User management (Admin) |
-| Categories | `/api/categories` | Category CRUD |
-| Medicines | `/api/medicines` | Medicine listing & CRUD |
-| Cart | `/api/carts` | Shopping cart operations |
-| Orders | `/api/orders` | Order placement & management |
-| Reviews | `/api/reviews` | Product reviews & ratings |
-| Dashboard | `/api/dashboard` | Role-based dashboard stats |
-| Contacts | `/api/contacts` | Contact form submissions |
-| Uploads | `/api/uploads` | Image uploads |
+| Group      | Base Path         | Description                            |
+| ---------- | ----------------- | -------------------------------------- |
+| Auth       | `/api/auth/*`     | Register, login, session (Better Auth) |
+| Users      | `/api/users`      | User management (Admin)                |
+| Categories | `/api/categories` | Category CRUD                          |
+| Medicines  | `/api/medicines`  | Medicine listing & CRUD                |
+| Cart       | `/api/carts`      | Shopping cart operations               |
+| Orders     | `/api/orders`     | Order placement & management           |
+| Reviews    | `/api/reviews`    | Product reviews & ratings              |
+| Dashboard  | `/api/dashboard`  | Role-based dashboard stats             |
+| Contacts   | `/api/contacts`   | Contact form submissions               |
+| Uploads    | `/api/uploads`    | Image uploads                          |
 
 ## Roles
 

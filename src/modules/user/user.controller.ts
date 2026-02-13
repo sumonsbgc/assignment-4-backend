@@ -3,6 +3,78 @@ import { userService } from "./user.service.js";
 
 class UserController {
 	/**
+	 * Get current authenticated user's profile
+	 */
+	getMe: RequestHandler = async (req: Request, res: Response) => {
+		try {
+			const userId = req.user?.id;
+			if (!userId) {
+				return res.status(401).json({
+					success: false,
+					message: "Unauthorized",
+				});
+			}
+
+			const user = await userService.getUserById(userId);
+
+			if (!user) {
+				return res.status(404).json({
+					success: false,
+					message: "User not found",
+				});
+			}
+
+			res.status(200).json({
+				success: true,
+				message: "Profile fetched successfully",
+				data: user,
+			});
+		} catch (error: any) {
+			res.status(500).json({
+				success: false,
+				message: "Error fetching profile",
+				error: error.message,
+			});
+		}
+	};
+
+	/**
+	 * Update current authenticated user's profile
+	 */
+	updateMe: RequestHandler = async (req: Request, res: Response) => {
+		try {
+			const userId = req.user?.id;
+			if (!userId) {
+				return res.status(401).json({
+					success: false,
+					message: "Unauthorized",
+				});
+			}
+
+			// Only allow updating safe fields (not role/status)
+			const { name, email, phone, image } = req.body;
+			const user = await userService.updateUser(userId, {
+				name,
+				email,
+				phone,
+				image,
+			});
+
+			res.status(200).json({
+				success: true,
+				message: "Profile updated successfully",
+				data: user,
+			});
+		} catch (error: any) {
+			res.status(500).json({
+				success: false,
+				message: "Error updating profile",
+				error: error.message,
+			});
+		}
+	};
+
+	/**
 	 * Get all users
 	 */
 	getAllUsers: RequestHandler = async (req: Request, res: Response) => {
