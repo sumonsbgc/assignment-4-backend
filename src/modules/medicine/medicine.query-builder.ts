@@ -10,7 +10,7 @@ export interface QueryBuilderResult {
 export function buildMedicineQuery(queryParams: any): QueryBuilderResult {
 	const where: any = {};
 	const page = queryParams.page ? parseInt(queryParams.page) : 1;
-	const limit = queryParams.limit ? parseInt(queryParams.limit) : 20;
+	const limit = queryParams.limit ? parseInt(queryParams.limit) : 10;
 	const skip = (page - 1) * limit;
 
 	// Filters
@@ -25,7 +25,7 @@ export function buildMedicineQuery(queryParams: any): QueryBuilderResult {
 	if (queryParams.manufacturer) {
 		where.manufacturer = {
 			contains: queryParams.manufacturer,
-			mode: "insensitive" as Prisma.QueryMode, 
+			mode: "insensitive" as Prisma.QueryMode,
 		};
 	}
 
