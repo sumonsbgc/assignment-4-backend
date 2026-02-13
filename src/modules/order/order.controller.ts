@@ -123,8 +123,14 @@ class OrderController {
 			const page = parseInt(req.query.page as string) || 1;
 			const limit = parseInt(req.query.limit as string) || 20;
 			const status = req.query.status as OrderStatus | undefined;
+			const search = req.query.search as string | undefined;
 
-			const result = await orderService.getAllOrders(page, limit, status);
+			const result = await orderService.getAllOrders(
+				page,
+				limit,
+				status,
+				search,
+			);
 
 			res.status(200).json({
 				success: true,
@@ -146,6 +152,7 @@ class OrderController {
 			const page = parseInt(req.query.page as string) || 1;
 			const limit = parseInt(req.query.limit as string) || 20;
 			const status = req.query.status as OrderStatus | undefined;
+			const search = req.query.search as string | undefined;
 
 			if (!sellerId) {
 				return res.status(401).json({
@@ -159,6 +166,7 @@ class OrderController {
 				page,
 				limit,
 				status,
+				search,
 			);
 
 			res.status(200).json({

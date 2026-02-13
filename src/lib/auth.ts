@@ -40,7 +40,7 @@ export const auth = betterAuth({
 			role: {
 				type: "string",
 				defaultValue: "CUSTOMER",
-				required: false,
+				required: true,
 			},
 			phone: {
 				type: "string",

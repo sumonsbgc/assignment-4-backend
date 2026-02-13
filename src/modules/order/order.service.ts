@@ -203,9 +203,22 @@ class OrderService {
 		page: number = 1,
 		limit: number = 20,
 		status?: OrderStatus,
+		search?: string,
 	): Promise<PaginatedOrdersResponse> => {
 		const skip = (page - 1) * limit;
-		const where = status ? { status } : {};
+		const where: any = {};
+
+		if (status) {
+			where.status = status;
+		}
+
+		if (search) {
+			where.OR = [
+				{ orderNumber: { contains: search, mode: "insensitive" } },
+				{ user: { name: { contains: search, mode: "insensitive" } } },
+				{ user: { email: { contains: search, mode: "insensitive" } } },
+			];
+		}
 
 		const [orders, total] = await Promise.all([
 			prisma.order.findMany({
@@ -259,6 +272,7 @@ class OrderService {
 		page: number = 1,
 		limit: number = 20,
 		status?: OrderStatus,
+		search?: string,
 	): Promise<PaginatedOrdersResponse> => {
 		const skip = (page - 1) * limit;
 
@@ -275,6 +289,14 @@ class OrderService {
 
 		if (status) {
 			where.status = status;
+		}
+
+		if (search) {
+			where.OR = [
+				{ orderNumber: { contains: search, mode: "insensitive" } },
+				{ user: { name: { contains: search, mode: "insensitive" } } },
+				{ user: { email: { contains: search, mode: "insensitive" } } },
+			];
 		}
 
 		const [orders, total] = await Promise.all([
