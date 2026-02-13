@@ -7,13 +7,12 @@ class UserController {
 	 */
 	getAllUsers: RequestHandler = async (req: Request, res: Response) => {
 		try {
-			const { role } = req.query;
-			const users = await userService.getAllUsers(role as string);
+			const result = await userService.getAllUsers(req.query);
 
 			res.status(200).json({
 				success: true,
 				message: "Users fetched successfully",
-				data: users,
+				...result,
 			});
 		} catch (error: any) {
 			res.status(500).json({
@@ -101,12 +100,12 @@ class UserController {
 	 */
 	getSellers: RequestHandler = async (req: Request, res: Response) => {
 		try {
-			const sellers = await userService.getSellers();
+			const result = await userService.getSellers(req.query);
 
 			res.status(200).json({
 				success: true,
 				message: "Sellers fetched successfully",
-				data: sellers,
+				...result,
 			});
 		} catch (error: any) {
 			res.status(500).json({
@@ -122,12 +121,12 @@ class UserController {
 	 */
 	getCustomers: RequestHandler = async (req: Request, res: Response) => {
 		try {
-			const customers = await userService.getCustomers();
+			const result = await userService.getCustomers(req.query);
 
 			res.status(200).json({
 				success: true,
 				message: "Customers fetched successfully",
-				data: customers,
+				...result,
 			});
 		} catch (error: any) {
 			res.status(500).json({

@@ -1,28 +1,47 @@
 import { prisma } from "@lib/prisma";
 import type { CreateUserDto, UpdateUserDto } from "./user.types.js";
+import { buildUserQuery } from "./user.query-builder.js";
 import { helper } from "@/helper";
 
 class UserService {
-	getAllUsers = async (role?: string) => {
-		const where = role ? { role } : {};
-		return await prisma.user.findMany({
-			where,
-			select: {
-				id: true,
-				name: true,
-				email: true,
-				role: true,
-				phone: true,
-				image: true,
-				status: true,
-				emailVerified: true,
-				createdAt: true,
-				updatedAt: true,
+	getAllUsers = async (queryParams: any = {}) => {
+		const { where, orderBy, limit, skip } = buildUserQuery(queryParams);
+
+		const [users, total] = await Promise.all([
+			prisma.user.findMany({
+				where,
+				select: {
+					id: true,
+					name: true,
+					email: true,
+					role: true,
+					phone: true,
+					image: true,
+					status: true,
+					emailVerified: true,
+					createdAt: true,
+					updatedAt: true,
+				},
+				orderBy,
+				skip,
+				take: limit,
+			}),
+			prisma.user.count({ where }),
+		]);
+
+		const page = queryParams.page ? parseInt(queryParams.page) : 1;
+		const totalPages = Math.ceil(total / limit);
+
+		return {
+			data: users,
+			pagination: {
+				page,
+				limit,
+				total,
+				totalPages,
+				hasMore: page < totalPages,
 			},
-			orderBy: {
-				createdAt: "desc",
-			},
-		});
+		};
 	};
 
 	getUserById = async (id: string) => {
@@ -125,12 +144,12 @@ class UserService {
 		});
 	};
 
-	getSellers = async () => {
-		return await this.getAllUsers("SELLER");
+	getSellers = async (queryParams: any = {}) => {
+		return await this.getAllUsers({ ...queryParams, role: "SELLER" });
 	};
 
-	getCustomers = async () => {
-		return await this.getAllUsers("CUSTOMER");
+	getCustomers = async (queryParams: any = {}) => {
+		return await this.getAllUsers({ ...queryParams, role: "CUSTOMER" });
 	};
 }
 
