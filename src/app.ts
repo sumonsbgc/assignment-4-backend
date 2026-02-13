@@ -10,6 +10,7 @@ import orderRoutes from "./modules/order/order.routes.js";
 import reviewRoutes from "./modules/review/review.routes.js";
 import dashboardRoutes from "./modules/dashboard/dashboard.routes.js";
 import uploadRoutes from "./modules/upload/upload.routes.js";
+import contactRoutes from "./modules/contact/contact.routes.js";
 
 import { Application } from "express";
 import { toNodeHandler } from "better-auth/node";
@@ -53,6 +54,7 @@ app.use("/api/carts", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/uploads", uploadRoutes);
+app.use("/api/contacts", contactRoutes);
 
 // Error Handler
 app.use(

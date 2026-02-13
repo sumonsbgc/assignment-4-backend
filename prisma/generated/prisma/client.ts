@@ -50,6 +50,11 @@ export type Cart = Prisma.CartModel
  */
 export type Category = Prisma.CategoryModel
 /**
+ * Model Contact
+ * 
+ */
+export type Contact = Prisma.ContactModel
+/**
  * Model Medicine
  * 
  */

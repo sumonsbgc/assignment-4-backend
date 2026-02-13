@@ -10,6 +10,7 @@
  */
 export type * from './models/Cart.js'
 export type * from './models/Category.js'
+export type * from './models/Contact.js'
 export type * from './models/Medicine.js'
 export type * from './models/Order.js'
 export type * from './models/OrderItem.js'
