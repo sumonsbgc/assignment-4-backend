@@ -75,23 +75,30 @@ export const setUploadFolder = (folder: UploadFolder) => {
 };
 
 /**
- * Get the public URL path for an uploaded file
+ * Get the full public URL for an uploaded file
  */
 export const getUploadUrl = (filePath: string): string => {
+	const baseUrl = process.env.BETTER_AUTH_URL || "http://localhost:5000";
 	// filePath comes from multer as an absolute path; extract relative from "uploads/"
 	const idx = filePath.replace(/\\/g, "/").indexOf("uploads/");
 	if (idx !== -1) {
-		return `/${filePath.replace(/\\/g, "/").substring(idx)}`;
+		return `${baseUrl}/${filePath.replace(/\\/g, "/").substring(idx)}`;
 	}
 	return filePath;
 };
 
 /**
- * Delete a previously uploaded file given its URL path (e.g. /uploads/medicines/abc.jpg)
+ * Delete a previously uploaded file given its URL (e.g. http://localhost:5000/uploads/medicines/abc.jpg)
  */
 export const deleteUploadedFile = (urlPath: string): void => {
 	try {
-		const filePath = path.join(process.cwd(), urlPath);
+		// Extract the /uploads/... part from a full URL or relative path
+		let relativePath = urlPath;
+		const uploadsIdx = urlPath.indexOf("/uploads/");
+		if (uploadsIdx !== -1) {
+			relativePath = urlPath.substring(uploadsIdx);
+		}
+		const filePath = path.join(process.cwd(), relativePath);
 		if (fs.existsSync(filePath)) {
 			fs.unlinkSync(filePath);
 		}
