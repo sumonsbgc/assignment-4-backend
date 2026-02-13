@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import path from "path";
 
 import categoryRoutes from "./modules/category/category.routes.js";
 import medicineRoutes from "./modules/medicine/medicine.routes.js";
@@ -8,6 +9,7 @@ import cartRoutes from "./modules/cart/cart.routes.js";
 import orderRoutes from "./modules/order/order.routes.js";
 import reviewRoutes from "./modules/review/review.routes.js";
 import dashboardRoutes from "./modules/dashboard/dashboard.routes.js";
+import uploadRoutes from "./modules/upload/upload.routes.js";
 
 import { Application } from "express";
 import { toNodeHandler } from "better-auth/node";
@@ -39,6 +41,9 @@ app.get("/", (req, res) => {
 
 app.all("/api/auth/{*any}", toNodeHandler(auth));
 
+// Serve uploaded files as static assets
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+
 // API Routes
 app.use("/api/users", userRoutes);
 app.use("/api/categories", categoryRoutes);
@@ -47,6 +52,7 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/carts", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/uploads", uploadRoutes);
 
 // Error Handler
 app.use(
