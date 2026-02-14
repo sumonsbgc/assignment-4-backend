@@ -1,5 +1,6 @@
 import type { Request, RequestHandler, Response } from "express";
 import { userService } from "./user.service.js";
+import { auth } from "@/lib/auth";
 
 class UserController {
 	/**
@@ -39,7 +40,7 @@ class UserController {
 	};
 
 	/**
-	 * Update current authenticated user's profile
+	 * Update current authenticated user's profile via better-auth
 	 */
 	updateMe: RequestHandler = async (req: Request, res: Response) => {
 		try {
@@ -52,13 +53,22 @@ class UserController {
 			}
 
 			// Only allow updating safe fields (not role/status)
-			const { name, email, phone, image } = req.body;
-			const user = await userService.updateUser(userId, {
-				name,
-				email,
-				phone,
-				image,
+			const { name, phone, image } = req.body;
+
+			// Build update body — only include fields that are provided
+			const updateBody: Record<string, any> = {};
+			if (name !== undefined) updateBody.name = name;
+			if (image !== undefined) updateBody.image = image;
+			if (phone !== undefined) updateBody.phone = phone;
+
+			// Use better-auth's updateUser to keep session in sync
+			await auth.api.updateUser({
+				body: updateBody,
+				headers: req.headers as Record<string, string>,
 			});
+
+			// Fetch updated user from DB to return full data
+			const user = await userService.getUserById(userId);
 
 			res.status(200).json({
 				success: true,
