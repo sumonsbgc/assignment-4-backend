@@ -7,7 +7,6 @@ import crypto from "crypto";
 import path from "path";
 import config from "./config.js";
 
-// Initialize S3 Client
 const s3Client = new S3Client({
 	region: config.awsRegion,
 	credentials: {
@@ -16,7 +15,6 @@ const s3Client = new S3Client({
 	},
 });
 
-// Allowed image MIME types
 const ALLOWED_MIMES = [
 	"image/jpeg",
 	"image/png",
@@ -25,13 +23,10 @@ const ALLOWED_MIMES = [
 	"image/svg+xml",
 ];
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 export type UploadFolder = "medicines" | "categories" | "users";
 
-/**
- * Validate file before upload
- */
 export const validateFile = (
 	file: Express.Multer.File,
 ): { valid: boolean; error?: string } => {
@@ -52,9 +47,6 @@ export const validateFile = (
 	return { valid: true };
 };
 
-/**
- * Generate unique filename for S3
- */
 const generateFileName = (
 	originalName: string,
 	folder: UploadFolder,
@@ -64,9 +56,6 @@ const generateFileName = (
 	return `${folder}/${uniqueName}`;
 };
 
-/**
- * Upload file to S3
- */
 export const uploadToS3 = async (
 	file: Express.Multer.File,
 	folder: UploadFolder,
@@ -78,26 +67,18 @@ export const uploadToS3 = async (
 		Key: key,
 		Body: file.buffer,
 		ContentType: file.mimetype,
-		// Make file publicly readable
-		ACL: "public-read",
 	});
 
 	await s3Client.send(command);
-
-	// Return the public URL
 	const url = `https://${config.awsS3Bucket}.s3.${config.awsRegion}.amazonaws.com/${key}`;
 
 	return { url, key };
 };
 
-/**
- * Delete file from S3
- */
 export const deleteFromS3 = async (urlOrKey: string): Promise<void> => {
 	try {
 		let key = urlOrKey;
 
-		// If it's a full URL, extract the key
 		if (urlOrKey.includes("amazonaws.com/")) {
 			const urlParts = urlOrKey.split("amazonaws.com/");
 			key = urlParts[1] ?? urlOrKey;
@@ -117,9 +98,6 @@ export const deleteFromS3 = async (urlOrKey: string): Promise<void> => {
 	}
 };
 
-/**
- * Get the public URL for an S3 object
- */
 export const getS3Url = (key: string): string => {
 	return `https://${config.awsS3Bucket}.s3.${config.awsRegion}.amazonaws.com/${key}`;
 };
