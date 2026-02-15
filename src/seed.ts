@@ -11,14 +11,14 @@ async function main() {
 		// Delete existing data
 		// await deleteAllUsers();
 		// Seed admins
-		await seedAdmins();
+		// await seedAdmins();
 		// Seed customers
-		await seedCustomers();
+		// await seedCustomers();
 		// // Seed sellers
-		await seedSellers();
+		// await seedSellers();
 
 		// // Seed categories
-		await seedCategories();
+		// await seedCategories();
 		// // Seed medicines
 		await seedMedicines();
 
