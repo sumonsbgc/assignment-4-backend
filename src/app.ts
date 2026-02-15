@@ -42,8 +42,16 @@ app.get("/", (req, res) => {
 
 app.all("/api/auth/{*any}", toNodeHandler(auth));
 
-// Serve uploaded files as static assets
-app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+// Serve uploaded files as static assets with CORS headers
+app.use(
+	"/uploads",
+	(req, res, next) => {
+		res.setHeader("Access-Control-Allow-Origin", "*");
+		res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+		next();
+	},
+	express.static(path.join(process.cwd(), "uploads")),
+);
 
 // API Routes
 app.use("/api/users", userRoutes);

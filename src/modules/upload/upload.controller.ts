@@ -1,9 +1,9 @@
 import type { Request, Response, NextFunction, RequestHandler } from "express";
-import { getUploadUrl } from "@/lib/upload";
+import { uploadToS3, validateFile, type UploadFolder } from "@/lib/s3";
 
 class UploadController {
 	/**
-	 * Handle single image upload
+	 * Handle single image upload to S3
 	 * Returns the public URL of the uploaded file
 	 */
 	uploadImage: RequestHandler = async (
@@ -19,7 +19,20 @@ class UploadController {
 				});
 			}
 
-			const url = getUploadUrl(req.file.path);
+			// Validate file
+			const validation = validateFile(req.file);
+			if (!validation.valid) {
+				return res.status(400).json({
+					success: false,
+					message: validation.error,
+				});
+			}
+
+			// Get folder from middleware
+			const folder = (req as any).__uploadFolder as UploadFolder;
+
+			// Upload to S3
+			const { url } = await uploadToS3(req.file, folder);
 
 			res.status(200).json({
 				success: true,
@@ -32,12 +45,13 @@ class UploadController {
 				},
 			});
 		} catch (error) {
+			console.error("Upload error:", error);
 			next(error);
 		}
 	};
 
 	/**
-	 * Handle multiple image uploads
+	 * Handle multiple image uploads to S3
 	 * Returns array of public URLs
 	 */
 	uploadImages: RequestHandler = async (
@@ -53,12 +67,28 @@ class UploadController {
 				});
 			}
 
-			const files = (req.files as Express.Multer.File[]).map((file) => ({
-				url: getUploadUrl(file.path),
-				originalName: file.originalname,
-				size: file.size,
-				mimetype: file.mimetype,
-			}));
+			// Get folder from middleware
+			const folder = (req as any).__uploadFolder as UploadFolder;
+
+			// Upload all files to S3
+			const uploadPromises = (req.files as Express.Multer.File[]).map(
+				async (file) => {
+					const validation = validateFile(file);
+					if (!validation.valid) {
+						throw new Error(validation.error);
+					}
+
+					const { url } = await uploadToS3(file, folder);
+					return {
+						url,
+						originalName: file.originalname,
+						size: file.size,
+						mimetype: file.mimetype,
+					};
+				},
+			);
+
+			const files = await Promise.all(uploadPromises);
 
 			res.status(200).json({
 				success: true,
@@ -66,6 +96,7 @@ class UploadController {
 				data: files,
 			});
 		} catch (error) {
+			console.error("Upload error:", error);
 			next(error);
 		}
 	};
