@@ -200,7 +200,17 @@ class OrderController {
 				message: "Order status updated",
 				data: order,
 			});
-		} catch (error) {
+		} catch (error: any) {
+			if (
+				error.message === "Order not found" ||
+				error.message?.includes("Cannot transition") ||
+				error.message?.includes("You can only update orders")
+			) {
+				return res.status(400).json({
+					success: false,
+					message: error.message,
+				});
+			}
 			next(error);
 		}
 	};
