@@ -9,7 +9,7 @@ class UploadController {
 	uploadImage: RequestHandler = async (
 		req: Request,
 		res: Response,
-		next: NextFunction,
+		_next: NextFunction,
 	) => {
 		try {
 			if (!req.file) {
@@ -44,9 +44,12 @@ class UploadController {
 					mimetype: req.file.mimetype,
 				},
 			});
-		} catch (error) {
+		} catch (error: any) {
 			console.error("Upload error:", error);
-			next(error);
+			return res.status(500).json({
+				success: false,
+				message: error.message || "Failed to upload file to S3",
+			});
 		}
 	};
 
@@ -57,7 +60,7 @@ class UploadController {
 	uploadImages: RequestHandler = async (
 		req: Request,
 		res: Response,
-		next: NextFunction,
+		_next: NextFunction,
 	) => {
 		try {
 			if (!req.files || !Array.isArray(req.files) || req.files.length === 0) {
@@ -95,9 +98,12 @@ class UploadController {
 				message: "Files uploaded successfully",
 				data: files,
 			});
-		} catch (error) {
+		} catch (error: any) {
 			console.error("Upload error:", error);
-			next(error);
+			return res.status(500).json({
+				success: false,
+				message: error.message || "Failed to upload files to S3",
+			});
 		}
 	};
 }
