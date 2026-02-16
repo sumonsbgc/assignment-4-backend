@@ -2,10 +2,6 @@ import type { Request, Response, NextFunction, RequestHandler } from "express";
 import { uploadToS3, validateFile, type UploadFolder } from "@/lib/s3";
 
 class UploadController {
-	/**
-	 * Handle single image upload to S3
-	 * Returns the public URL of the uploaded file
-	 */
 	uploadImage: RequestHandler = async (
 		req: Request,
 		res: Response,
@@ -19,7 +15,6 @@ class UploadController {
 				});
 			}
 
-			// Validate file
 			const validation = validateFile(req.file);
 			if (!validation.valid) {
 				return res.status(400).json({
@@ -28,10 +23,8 @@ class UploadController {
 				});
 			}
 
-			// Get folder from middleware
 			const folder = (req as any).__uploadFolder as UploadFolder;
 
-			// Upload to S3
 			const { url } = await uploadToS3(req.file, folder);
 
 			res.status(200).json({
@@ -53,10 +46,6 @@ class UploadController {
 		}
 	};
 
-	/**
-	 * Handle multiple image uploads to S3
-	 * Returns array of public URLs
-	 */
 	uploadImages: RequestHandler = async (
 		req: Request,
 		res: Response,
@@ -70,10 +59,8 @@ class UploadController {
 				});
 			}
 
-			// Get folder from middleware
 			const folder = (req as any).__uploadFolder as UploadFolder;
 
-			// Upload all files to S3
 			const uploadPromises = (req.files as Express.Multer.File[]).map(
 				async (file) => {
 					const validation = validateFile(file);
